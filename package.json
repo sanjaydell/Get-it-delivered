@@ -11,8 +11,11 @@
     "@types/react": "^18.0.29",
     "@types/react-dom": "^18.0.11",
     "apollo-server": "^3.12.0",
+    "bcryptjs": "^2.4.3",
     "graphql": "^16.6.0",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.3",
+    "nodemon": "^2.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.9.0",
@@ -48,7 +51,6 @@
   },
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "tailwind.config.js",
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://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@github.com/sanjaydell/Get-it-delivered.git"

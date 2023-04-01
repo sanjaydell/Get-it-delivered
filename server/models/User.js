@@ -1,14 +1,20 @@
 const { model, Schema } = require("mongoose");
 
 const userSchema = new Schema({
-  userName: String,
   password: String,
-  Email: String,
+  confirmPassword: String,
+  email: String,
   firstName: String,
   lastName: String,
   mobile: String,
-  address: Object,
-  userId: String,
+  address: {
+    addressLine1: String,
+    addressLine2: String,
+    city: String,
+    state: String,
+    pinCode: String,
+  },
+  createdAt: String,
 });
 
 module.exports = model("User", userSchema);
