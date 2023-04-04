@@ -4,6 +4,17 @@ const { SECRET_KEY } = require("../../config");
 const User = require("../../models/User");
 const { UserInputError } = require("apollo-server");
 
+function createToken (res) {
+  return jwt.sign(
+    {
+      id: res.id,
+      email: res.email,
+    },
+    SECRET_KEY,
+    { expiresIn: "1h" }
+  );
+}
+
 module.exports = {
   Query: {
     async getUsers() {
@@ -14,6 +25,37 @@ module.exports = {
         throw new Error(err);
       }
     },
+    async login(_, {email, password}) {
+      const foundUser = await User.findOne({ email });
+      if(!foundUser){
+        throw new UserInputError('Please Enter Valid Credentials', {
+          errors: {
+            email: 'Please Enter Valid Credentials'
+          }
+        })
+      }
+
+      const match = await bcrypt.compare(password, foundUser.password)
+
+    if (!match) {
+      throw new UserInputError('Please Enter Valid Credentials', {
+        errors: {
+          password: 'Please Enter Valid Credentials'
+        }
+      })
+    }
+
+    const token = createToken(foundUser);
+
+
+    return {
+      ...foundUser.doc,
+      id: foundUser.id,
+      email: foundUser.email,
+      createdAt: foundUser.createdAt,
+      token,
+    };
+    }
   },
   Mutation: {
     async register(
@@ -55,14 +97,7 @@ module.exports = {
 
       const res = await newUser.save();
 
-      const token = jwt.sign(
-        {
-          id: res.id,
-          email: res.email,
-        },
-        SECRET_KEY,
-        { expiresIn: "1h" }
-      );
+      const token = createToken(res);
 
       return {
         ...res.doc,
